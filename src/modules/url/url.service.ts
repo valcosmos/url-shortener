@@ -4,7 +4,6 @@ import { UpdateUrlDto } from './dto/update-url.dto';
 import { UidService } from '@/services/uid/uid.service';
 import { DatabaseService } from '@/database/database.service';
 import { ConfigService } from '@nestjs/config';
-import { Response } from 'express';
 
 @Injectable()
 export class UrlService {
@@ -36,18 +35,12 @@ export class UrlService {
     return `This action returns all url`;
   }
 
-  async findOne(uid: string, res: Response) {
-    const redirect = await this.databaseService.url.findUnique({
+  async findOne(uid: string) {
+    return await this.databaseService.url.findUnique({
       where: {
         url: `${this.host}/${uid}`,
       },
     });
-
-    if (!redirect) {
-      throw new NotFoundException('URL not found');
-    }
-
-    return redirect;
   }
 
   update(uid: string, updateUrlDto: UpdateUrlDto) {
